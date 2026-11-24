@@ -2,6 +2,12 @@
 
 Projeto de estudo desenvolvido durante minha formação como desenvolvedor Full Stack, com foco na construção de uma interface de carrinho de compras responsiva e na aplicação prática dos fundamentos do desenvolvimento front-end.
 
+## Demonstração online
+
+Acesse o projeto publicado: [https://mini-cart-six.vercel.app](https://mini-cart-six.vercel.app)
+
+Hospedagem realizada na Vercel, com integração ao GitHub e build automatizado.
+
 ## Sobre o projeto
 
 O MiniCart Tech simula um carrinho de compras de um e-commerce de produtos tecnológicos. O objetivo foi aplicar conhecimentos de programação em um cenário próximo de uma aplicação comercial, desde o planejamento até os testes e a preparação para publicação.
@@ -31,6 +37,7 @@ O MiniCart Tech simula um carrinho de compras de um e-commerce de produtos tecno
 | Lucide | Ícones da interface |
 | Node.js e npm | Ambiente e gerenciamento de dependências |
 | Vite | Servidor de desenvolvimento e build |
+| Vercel | Hospedagem e deploy |
 | VS Code | Ambiente de desenvolvimento |
 | Git e GitHub | Controle de versão |
 | ChatGPT | Planejamento, orientação técnica e aprendizado |
