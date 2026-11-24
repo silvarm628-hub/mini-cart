@@ -3,7 +3,6 @@ import './style.css'
 import foneImg from './assets/fone-de-ouvido.jpg'
 import tecladoImg from './assets/teclado.jpg'
 import mouseImg from './assets/mouse.jpg'
-import { Currency } from 'lucide'
 
 // 02 - CONSTANTES E CONFIGURAÇÕES
 const PRECO_GARANTIA = 49.90
@@ -47,6 +46,24 @@ const produtos = [
 
 // 04 - SELETORES DO DOM
 const listaProdutos = document.querySelector('#products-list')
+const formularioCupom = document.querySelector('#coupon-form')
+const campoCupom = document.querySelector('#coupon-input')
+const mensagemCupom = document.querySelector('#coupon-message')
+const formularioFrete = document.querySelector('#shipping-form')
+const campoCep = document.querySelector('#cep-input')
+const mensagemFrete = document.querySelector('#shipping-message')
+const botaoLimpar = document.querySelector('.clear-cart-button')
+const botaoFinalizar = document.querySelector('#checkout-button')
+const contadorCarrinho = document.querySelector('.cart-count')
+const botaoCarrinho = document.querySelector('.cart-button')
+const rotuloSubtotal = document.querySelector('#subtotal-label')
+const valorSubtotal = document.querySelector('#subtotal-value')
+const valorDesconto = document.querySelector('#discount-value')
+const linhaDesconto = document.querySelector('#discount-row')
+const valorGarantia = document.querySelector('#warranty-value')
+const calculadoraFrete = document.querySelector('#shipping-calculator')
+const valorFrete = document.querySelector('#shipping-value')
+const valorTotal = document.querySelector('#total-value')
 
 // 05 - FUNÇÕES AUXILIARES
 function formatarPreco(valor) {
@@ -54,6 +71,37 @@ function formatarPreco(valor) {
         style: 'currency',
         currency: 'BRL'
     })
+}
+
+// Restaura o estado inicial dos formulários.
+function limparFormularios() {
+
+    cupomAplicado = false
+
+    campoCupom.value = ''
+    mensagemCupom.textContent = ''
+    mensagemCupom.hidden = true
+
+    campoCep.value = ''
+    mensagemFrete.textContent = ''
+    mensagemFrete.hidden = true
+}
+
+function restaurarFocoProduto(controle, indice) {
+    if (produtos.length === 0) {
+        listaProdutos.querySelector('.empty-cart h2').focus()
+        return
+    }
+
+    const produto = produtos[Math.min(indice, produtos.length - 1)]
+    const card = listaProdutos.querySelector(`article[data-id="${produto.id}"]`)
+    const seletor = ['.quantity-plus', '.quantity-minus', '.warranty-checkbox']
+        .find((opcao) => controle.matches(opcao))
+    const controleAnterior = seletor ? card.querySelector(seletor) : null
+    const destino = controleAnterior && !controleAnterior.disabled
+        ? controleAnterior
+        : card.querySelector('.quantity-plus')
+    destino.focus()
 }
 
 // 06 - FUNÇÕES DE CÁLCULO
@@ -125,50 +173,52 @@ function renderizarResumo() {
 
 
     // Atualiza a quantidade no cabeçalho.
-    document.querySelector('.cart-count').textContent =
-        resumo.quantidadeTotal
+    const { quantidadeTotal } = resumo
+    const itens = quantidadeTotal === 1 ? 'item' : 'itens'
+    contadorCarrinho.textContent = quantidadeTotal
+    botaoCarrinho.setAttribute('aria-label', `Ver carrinho, ${quantidadeTotal} ${itens}`)
 
 
     // Atualiza o subtotal e a quantidade de itens.
-    document.querySelector('#subtotal-label').textContent =
-        `Subtotal (${resumo.quantidadeTotal} ${resumo.quantidadeTotal === 1 ? 'item' : 'itens'})`
+    rotuloSubtotal.textContent =
+        `Subtotal (${quantidadeTotal} ${itens})`
 
-    document.querySelector('#subtotal-value').textContent =
+    valorSubtotal.textContent =
         formatarPreco(resumo.subtotal)
 
 
     // Atualiza o desconto.
-    document.querySelector('#discount-value').textContent =
+    valorDesconto.textContent =
         `− ${formatarPreco(resumo.desconto)}`
 
-    document.querySelector('#discount-row').hidden =
+    linhaDesconto.hidden =
         !cupomAplicado || resumo.quantidadeTotal === 0
 
 
     // Atualiza o valor das garantias.
-    document.querySelector('#warranty-value').textContent =
+    valorGarantia.textContent =
         formatarPreco(resumo.garantiaTotal)
 
 
     // Exibe a calculadora somente quando houver frete pago.
-    document.querySelector('#shipping-calculator').hidden =
+    calculadoraFrete.hidden =
         resumo.frete === 0
 
-    document.querySelector('#shipping-value').textContent =
+    valorFrete.textContent =
         `Frete: ${formatarPreco(resumo.frete)}`
 
 
     // Atualiza o valor final.
-    document.querySelector('#total-value').textContent =
+    valorTotal.textContent =
         formatarPreco(resumo.total)
 
 
     // Impede finalizar uma compra sem produtos.
-    document.querySelector('#checkout-button').disabled =
+    botaoFinalizar.disabled =
         resumo.quantidadeTotal === 0
 }
 
-function renderizarProdutos() {
+function renderizarProdutos(controle, indice) {
     const cards = produtos.map((produto) => {
 
        return `
@@ -263,7 +313,37 @@ function renderizarProdutos() {
     })
 
     listaProdutos.innerHTML = cards.join('')
+    verificarCarrinhoVazio()
     renderizarResumo()
+    if (controle) restaurarFocoProduto(controle, indice)
+}
+
+// Atualiza a interface quando não existem produtos.
+function verificarCarrinhoVazio() {
+
+    const carrinhoVazio = produtos.length === 0
+
+    // Desativa o botão de limpeza quando não há produtos.
+    botaoLimpar.disabled = carrinhoVazio
+
+    if (!carrinhoVazio) return
+
+    // Limpa os dados dos formulários.
+    limparFormularios()
+
+    // Exibe a mensagem de carrinho vazio.
+    listaProdutos.innerHTML = `
+        <div class="empty-cart">
+
+            <span class="empty-cart-icon"
+                  aria-hidden="true"></span>
+
+            <h2 tabindex="-1">Seu carrinho está vazio</h2>
+
+            <p>Você não possui produtos no carrinho.</p>
+
+        </div>
+    `
 }
 
 // 08 - EVENTOS
@@ -307,7 +387,7 @@ listaProdutos.addEventListener('click', (evento) => {
     }
 
     // Atualiza os cards após a alteração.
-    renderizarProdutos()
+    renderizarProdutos(botao, indice)
 })
 
 
@@ -328,7 +408,116 @@ listaProdutos.addEventListener('change', (evento) => {
     produto.garantia = evento.target.checked
 
     // Atualiza o preço exibido.
-    renderizarProdutos()
+    renderizarProdutos(evento.target, produtos.indexOf(produto))
+})
+
+// Detecta o envio do formulário.
+formularioCupom.addEventListener('submit', (evento) => {
+
+    // Impede o recarregamento da página.
+    evento.preventDefault()
+
+    // Padroniza o texto digitado.
+    const codigo = campoCupom.value.trim().toUpperCase()
+
+    // Verifica se existem produtos no carrinho.
+    if (produtos.length === 0) {
+
+        mensagemCupom.textContent = 'Seu carrinho está vazio.'
+        mensagemCupom.hidden = false
+
+        return
+    }
+
+    // Verifica se o cupom é válido.
+    cupomAplicado = codigo === CUPOM_VALIDO
+
+    // Exibe a mensagem correspondente.
+    if (cupomAplicado) {
+
+        mensagemCupom.textContent = 'Cupom aplicado com sucesso!'
+
+    } else {
+
+        mensagemCupom.textContent = 'Cupom inválido.'
+
+    }
+
+    mensagemCupom.hidden = false
+
+    // Atualiza os valores da compra.
+    renderizarResumo()
+})
+
+// Formata o CEP enquanto o usuário digita.
+campoCep.addEventListener('input', () => {
+
+    // Remove caracteres que não sejam números.
+    const numeros = campoCep.value.replace(/\D/g, '').slice(0, 8)
+
+    // Adiciona o hífen depois do quinto número.
+    campoCep.value = numeros.replace(/^(\d{5})(\d)/, '$1-$2')
+
+    // Oculta a mensagem anterior.
+    mensagemFrete.hidden = true
+})
+
+// Detecta o envio do formulário.
+formularioFrete.addEventListener('submit', (evento) => {
+
+    evento.preventDefault()
+
+    // Verifica se o CEP possui o formato correto.
+    const cepValido = /^\d{5}-\d{3}$/.test(campoCep.value)
+
+    if (!cepValido) {
+
+        mensagemFrete.textContent = 'Informe um CEP válido.'
+
+    } else {
+
+        mensagemFrete.textContent =
+            `Frete simulado: ${formatarPreco(VALOR_FRETE)}`
+
+    }
+
+    mensagemFrete.hidden = false
+})
+
+// Detecta o clique no botão de limpar carrinho.
+botaoLimpar.addEventListener('click', () => {
+
+    if (produtos.length === 0) return
+
+    // Solicita a confirmação do usuário.
+    const confirmou = window.confirm(
+        'Deseja remover todos os produtos do carrinho?'
+    )
+
+    if (!confirmou) return
+
+    // Remove todos os produtos do array.
+    produtos.splice(0, produtos.length)
+
+    // Atualiza a interface.
+    renderizarProdutos(botaoLimpar, 0)
+})
+
+botaoFinalizar.addEventListener('click', () => {
+
+    // Impede finalizar um carrinho vazio.
+    if (produtos.length === 0) return
+
+    // Obtém os valores atualizados da compra.
+    const resumo = calcularResumo()
+
+    // Exibe a confirmação simulada.
+    window.alert(
+        `Pedido finalizado com sucesso!\n\n` +
+        `Quantidade de itens: ${resumo.quantidadeTotal}\n` +
+        `Total: ${formatarPreco(resumo.total)}\n\n` +
+        `Esta é uma compra simulada.`
+    )
 })
 
 // 09 - INICIALIZAÇÃO
