@@ -1,194 +1,185 @@
 <!doctype html>
 <html lang="pt-BR">
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MiniCart Tech | BasicStore</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MiniCart Tech | BasicStore</title>
+  </head>
 
-<body>
-  <div id="app">
-    <header class="site-header">
+  <body>
+    <div id="app">
+      <header class="site-header">
 
-      <div class="header-container">
+        <div class="header-container">
 
-        <a href="#inicio" class="logo" aria-label="BasicStore - Início">
-          BasicStore
-        </a>
-        <nav class="main-nav" id="main-navigation" aria-label="Navegação principal">
-          <ul class="nav-list">
-            <li><a href="#inicio"> Início</a> </li>
-            <li><a href="#categorias">Categoria</a></li>
-            <li><a href="#ofertas"> Ofertas do Dia</a></li>
-            <li><a href="#promocoes"> Promoções</a></li>
-          </ul>
-        </nav>
-        <div class="header-actions">
+          <a href="#inicio" class="logo" aria-label="BasicStore - Início">
+            <i data-lucide="shopping-bag" aria-hidden="true"></i>
+            BasicStore
+          </a>
+          <nav class="main-nav" id="main-navigation" aria-label="Navegação principal">
+            <ul class="nav-list">
+              <li><a href="#inicio"> Início</a> </li>
+              <li><a href="#categorias">Categoria</a></li>
+              <li><a href="#ofertas"> Ofertas do Dia</a></li>
+              <li><a href="#promocoes"> Promoções</a></li>
+            </ul>
+          </nav>
+          <div class="header-actions">
 
-          <button class="account-button" type="button">
-            Entrar / Cadastro
-          </button>
-
-          <button class="cart-button" type="button" aria-label="Ver carrinho">
-            <span class="cart-icon" aria-hidden="true"></span>
-            <span class="cart-count" aria-hidden="true">3</span>
-
-          </button>
-          <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-controls="main-navigation"
-            aria-expanded="false">
-            <span class="menu-icon" aria-hidden="true"></span>
-
-          </button>
-        </div>
-      </div>
-
-    </header>
-    <div class="shipping-banner">
-      <p> Frete grátis em compras a partir de R$ 300,00 </p>
-    </div>
-
-    <main class="cart-main" id="inicio">
-      <div class="cart-layout">
-        <section class="cart-products" aria-label="Produtos do carrinho">
-          <div class="products-list" id="products-list"> </div>
-
-          <div class="cart-actions">
-            <button class="clear-cart-button" type="button">
-              Limpar carrinho
+            <button class="account-button" type="button">
+              Entrar / Cadastro
             </button>
-            <button class="continue-shopping" type="button">
-              <span class="continue-icon" aria-hidden="true"></span>
-              Continuar comprando
+
+            <button class="cart-button" type="button" aria-label="Ver carrinho">
+              <span class="cart-icon" aria-hidden="true"><i data-lucide="shopping-cart" aria-hidden="true"></i></span>
+              <span class="cart-count" aria-hidden="true">3</span>
+
+            </button>
+            <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-controls="main-navigation"
+              aria-expanded="false">
+              <span class="menu-icon" aria-hidden="true"></span>
+
             </button>
           </div>
-        </section>
+        </div>
 
-        <aside class="order-summary" aria-labelledby="summary-title">
-          <h2 id="summary-title">Resumo da compra</h2>
-          <div class="summary-content">
-            <form class="coupon-form" id="coupon-form">
+      </header>
+      <div class="shipping-banner">
+        <p><i data-lucide="truck" aria-hidden="true"></i> Frete grátis em compras a partir de R$ 300,00 </p>
+      </div>
 
-              <div class="coupon-field">
+      <main class="cart-main" id="inicio">
+        <div class="cart-layout">
+          <section class="cart-products" aria-label="Produtos do carrinho">
+            <div class="products-list" id="products-list"> </div>
 
-                <span class="coupon-icon" aria-hidden="true"></span>
+            <div class="cart-actions">
+              <button class="clear-cart-button" type="button">
+                Limpar carrinho
+              </button>
+              <button class="continue-shopping" type="button">
+                <span class="continue-icon" aria-hidden="true"><i data-lucide="arrow-left" aria-hidden="true"></i></span>
+                Continuar comprando
+              </button>
+            </div>
+          </section>
 
-                <input type="text" id="coupon-input" placeholder="Cupom de desconto" aria-label="Cupom de desconto">
+          <aside class="order-summary" aria-labelledby="summary-title">
+            <h2 id="summary-title">Resumo da compra</h2>
+            <div class="summary-content">
+              <form class="coupon-form" id="coupon-form">
+
+                <div class="coupon-field">
+
+                  <span class="coupon-icon" aria-hidden="true"><i data-lucide="tag" aria-hidden="true"></i></span>
+
+                  <input type="text" id="coupon-input" placeholder="Cupom de desconto" aria-label="Cupom de desconto">
+
+                </div>
+
+                <button class="coupon-button" type="submit">
+                  Aplicar
+                </button>
+                <p class="coupon-message" id="coupon-message" role="status" hidden></p>
+              </form>
+              <div class="summary-values">
+
+                <div class="summary-row">
+
+                  <span id="subtotal-label">Subtotal (0 itens)</span>
+
+                  <span id="subtotal-value">R$ 0,00</span>
+
+                </div>
+
+                <div class="summary-row discount-row" id="discount-row" hidden>
+
+                  <span>Desconto (10%)</span>
+
+                  <span id="discount-value">R$ 0,00</span>
+
+                </div>
+
+                <div class="summary-row">
+
+                  <span>Garantia estendida</span>
+
+                  <span id="warranty-value">R$ 0,00</span>
+
+                </div>
 
               </div>
 
-              <button class="coupon-button" type="submit">
-                Aplicar
+              <section
+                class="shipping-calculator"
+                id="shipping-calculator"
+                aria-labelledby="shipping-title"
+                hidden
+              >
+
+                <h3 id="shipping-title">Calcular frete</h3>
+
+                <p>Informe seu CEP para ver o valor do frete.</p>
+
+                <form class="shipping-form" id="shipping-form">
+
+                  <input
+                    type="text"
+                    id="cep-input"
+                    placeholder="00000-000"
+                    maxlength="9"
+                    inputmode="numeric"
+                    aria-label="CEP"
+                  >
+
+                  <button class="shipping-button" type="submit">
+                    Calcular
+                  </button>
+
+                </form>
+
+                <p id="shipping-message" role="status" hidden></p>
+
+                <div class="shipping-result" id="shipping-result" hidden>
+
+                  <span class="shipping-icon" aria-hidden="true"><i data-lucide="truck" aria-hidden="true"></i></span>
+
+                  <strong id="shipping-value"></strong>
+
+                </div>
+
+              </section>
+
+              <div class="summary-total">
+
+                <strong id="total-label">Total</strong>
+
+                <strong id="total-value">R$ 0,00</strong>
+
+              </div>
+
+              <button
+                class="checkout-button"
+                id="checkout-button"
+                type="button"
+              >
+
+                <span class="checkout-icon" aria-hidden="true"><i data-lucide="lock" aria-hidden="true"></i></span>
+
+                Finalizar compra
+
               </button>
-              <p class="coupon-message" id="coupon-message" role="status" hidden></p>
-            </form>
- <div class="summary-values">
 
-     
-        <div class="summary-row">
+            </div>
 
-            <span id="subtotal-label">Subtotal (0 itens)</span>
-
-            <span id="subtotal-value">R$ 0,00</span>
+          </aside>
 
         </div>
 
-        
-        <div class="summary-row discount-row" id="discount-row" hidden>
-
-            <span>Desconto (10%)</span>
-
-            <span id="discount-value">R$ 0,00</span>
-
-        </div>
-
-        
-        <div class="summary-row">
-
-            <span>Garantia estendida</span>
-
-            <span id="warranty-value">R$ 0,00</span>
-
-        </div>
-
+      </main>
     </div>
-
-
-    
-    <section
-        class="shipping-calculator"
-        id="shipping-calculator"
-        aria-labelledby="shipping-title"
-        hidden
-    >
-
-        <h3 id="shipping-title">Calcular frete</h3>
-
-        <p>Informe seu CEP para ver o valor do frete.</p>
-
-        <form class="shipping-form" id="shipping-form">
-
-            <input
-                type="text"
-                id="cep-input"
-                placeholder="00000-000"
-                maxlength="9"
-                inputmode="numeric"
-                aria-label="CEP"
-            >
-
-            <button class="shipping-button" type="submit">
-                Calcular
-            </button>
-
-        </form>
-
-        <p id="shipping-message" role="status" hidden></p>
-
-        <div class="shipping-result">
-
-            <span class="shipping-icon" aria-hidden="true"></span>
-
-            <strong id="shipping-value">Frete: R$ 19,90</strong>
-
-        </div>
-
-    </section>
-
-
-    <div class="summary-total">
-
-        <strong>Total</strong>
-
-        <strong id="total-value">R$ 0,00</strong>
-
-    </div>
-
-
-    
-    <button
-        class="checkout-button"
-        id="checkout-button"
-        type="button"
-    >
-
-        <span class="checkout-icon" aria-hidden="true"></span>
-
-        Finalizar compra
-
-    </button>
-
-
-          </div>
-
-        </aside>
-
-      </div>
-
-    </main>
-  </div>
-  <script type="module" src="/src/main.js"></script>
-</body>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 
 </html>
